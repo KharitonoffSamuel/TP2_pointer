@@ -27,11 +27,15 @@ typedef struct Liste Liste
 }
 
 int main(void){
+<<<<<<< HEAD
   
   Liste *maListe = initialisation();
   
   afficherListe(maListe);
 
+=======
+  //TEST sam
+>>>>>>> 35248e5b0e88bdeac4f8d6a8a021702e8c53a9b9
   return 1;
 }
 

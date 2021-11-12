@@ -14,30 +14,7 @@ typedef struct
   Monome *premier;
 } Polynome ;
 
-typedef struct ELement ELement;
-struct Element
-{
-  int nombre;
-  ELement *suivant;
-};
 
-typedef struct Liste Liste
-{
-  
-}
-
-int main(void){
-<<<<<<< HEAD
-  
-  Liste *maListe = initialisation();
-  
-  afficherListe(maListe);
-
-=======
-  //TEST sam
->>>>>>> 35248e5b0e88bdeac4f8d6a8a021702e8c53a9b9
-  return 1;
-}
 
 
 Polynome *newPolynome()
@@ -72,44 +49,129 @@ Monome* newMonome ()
 
   //Saisir m−>coeff et m−>exp
   printf("Saisir le coefficient du monome :") ; 
-  scanf("%d", m->coeff);
+  scanf("%d", &m->coeff);
   printf("Saisir l'exposant du monome :") ; 
-  scanf("%d", m->exp);
+  scanf("%d", &m->exp);
   m->suivant = NULL;
 
   return m;
 }
 
-Liste *initialisation()
+void insersion(Polynome *polynome)
 {
-  Liste *liste = malloc(sizeof(*liste));
-  Element *element = malloc(sizeof(*element));
+  //Allocation memoire d’un monome
+  Monome *m = newMonome();
+  //cas d’un problème d’allocation
+  if(m == NULL || m == NULL) exit(EXIT_FAILURE) ;
 
-  if(liste==NULL || element==NULL)
+  //Insertion d'un monome au debut de la liste polynomiale
+  m->suivant = polynome->premier;
+  polynome->premier = m;
+}
+
+void suppression(Polynome *polynome)
+{
+  if(polynome==NULL)
   {
     exit(EXIT_FAILURE);
   }
 
-  element->nombre = 0;
-  element->suivant = NULL;
-  liste->premier = element;
+  Monome *aSupprimer = polynome->premier;
+  polynome->premier=polynome->premier->suivant;
+  free(aSupprimer);
 }
 
 
-void afficherListe(Liste *liste)
+void destruction(Polynome *polynome)
 {
-  if(liste==NULL)
+  if(polynome==NULL)
+  {
+    exit(EXIT_FAILURE);
+  }
+  while(polynome->premier!=NULL)
+  {
+    suppression(polynome);
+  }
+}
+
+Polynome *initialisation()
+{
+  Polynome *polynome = malloc(sizeof(*polynome));
+  Monome *monome = malloc(sizeof(*monome));
+
+  if(polynome==NULL || monome==NULL)
   {
     exit(EXIT_FAILURE);
   }
 
-  Element *actuel = liste->premier;
+  monome->coeff = 0;
+  monome->suivant = NULL;
+  polynome->premier = monome;
+
+  return polynome;
+}
+
+
+int Puissance(int X, int N)
+{
+  if(N==0){
+      return 1;
+  }
+  else if(N%2==0)
+  {
+    return Puissance(X,(N/2))*Puissance(X,(N/2));
+  }
+  else if(N%2!=0)
+  {
+    return Puissance(X,((N-1)/2))*Puissance(X,((N-1)/2))*X;
+  }
+}
+
+
+void afficherPolynome(Polynome *polynome)
+{
+  if(polynome==NULL)
+  {
+    exit(EXIT_FAILURE);
+  }
+
+  Monome *actuel = polynome->premier;
 
   while (actuel != NULL)
   {
-    printf("%d -> ",actuel->nombre);
+    printf("%d x^ %d ",actuel->coeff, actuel->exp);
     actuel = actuel->suivant;
   }
   printf("NULL\n");
 }
 
+int Valeur(Polynome *polynome, int x0){
+    if(polynome==NULL)
+        exit(EXIT_FAILURE);
+      Monome next;
+      int res;
+    do{
+      res = polynome->premier->coeff*Puissance(x0,polynome->premier->exp);
+      polynome->premier=polynome->premier->suivant;
+      next.exp = polynome->premier->suivant;
+    }while(next.exp != NULL);
+}
+
+int main(void){
+  
+  /*Polynome *polynome = initialisation();
+  insersion(polynome);
+  insersion(polynome);
+  insersion(polynome);
+  afficherPolynome(polynome);
+  suppression(polynome);suppression(polynome);
+  afficherPolynome(polynome);
+  destruction(polynome);
+  free(polynome);
+  printf("Fin !");*/
+
+  printf("%d", Puissance(2,2));
+
+
+  return 1;
+}
